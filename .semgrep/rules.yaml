@@ -1,0 +1,49 @@
+rules:
+
+  - id: medilib-sql-injection
+    message: "SQL Injection : une entrée utilisateur est directement intégrée dans une requête SQL."
+    severity: ERROR
+    languages:
+      - javascript
+    patterns:
+      - pattern-either:
+          - pattern: $DB.$METHOD(`...${$USER}...`)
+          - pattern: $DB.$METHOD("..." + $USER + "...")
+          - pattern: $DB.$METHOD('...' + $USER + '...')
+    metadata:
+      cwe: "CWE-89"
+      category: security
+      technology:
+        - javascript
+
+  - id: medilib-hardcoded-secret
+    message: "Secret potentiellement hardcodé dans le code source."
+    severity: ERROR
+    languages:
+      - javascript
+    patterns:
+      - pattern-either:
+          - pattern: const JWT_SECRET = "..."
+          - pattern: const JWT_SECRET = '...'
+          - pattern: const ADMIN_TOKEN = "..."
+          - pattern: const ADMIN_TOKEN = '...'
+          - pattern: const DB_ENCRYPTION = "..."
+          - pattern: const DB_ENCRYPTION = '...'
+    metadata:
+      cwe: "CWE-798"
+      category: security
+      technology:
+        - javascript
+
+  - id: medilib-mass-assignment
+    message: "Mass Assignment : req.body est utilisé directement pour construire une mise à jour."
+    severity: ERROR
+    languages:
+      - javascript
+    pattern: |
+      const $UPDATES = req.body;
+    metadata:
+      cwe: "CWE-915"
+      category: security
+      technology:
+        - javascript
